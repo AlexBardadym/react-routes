@@ -7,14 +7,21 @@ class HomeWithId extends Component {
   static propTypes = {
     post: object.isRequired
   };
+
+  async componentDidMount() {
+    this.props.updateData(this.props.post.id);
+  }
+
   render() {
     const { post } = this.props;
-    const { id, title, body } = post;
+    const { id, body } = post;
     return (
       <div className="items" key={id}>
-        <Link to={`/posts/${id}/comments`}>Body : {body}</Link>
+        <Link to={`/comments?postId=${id}`}>Body : {body}</Link>
         <br />
-        <Link to={"/"}>Back to all posts</Link>
+        <Link to={"/"}>
+          <span className="backLink">Back to all posts</span>
+        </Link>
       </div>
     );
   }

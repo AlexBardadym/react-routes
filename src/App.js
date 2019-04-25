@@ -9,22 +9,29 @@ import Comment from "./components/comment";
 class App extends Component {
   state = {
     posts: [],
-    loader: true
+    loader: true,
+    commentsId: 0
   };
 
   async componentDidMount() {
-    const result = await fetch("https://jsonplaceholder.typicode.com/posts");
+    try {
+      const result = await fetch("https://jsonplaceholder.typicode.com/posts");
 
-    const postsFromApi = await result.json();
+      const postsFromApi = await result.json();
 
-    this.setState({
-      posts: [...postsFromApi],
-      loader: false
-    });
+      this.setState({
+        posts: [...postsFromApi],
+        loader: false
+      });
+    } catch (error) {
+      console.log("Server not respond");
+    }
   }
 
+  updateData = currentId => this.setState({ commentsId: currentId });
+
   render() {
-    const { posts, loader } = this.state;
+    const { posts, loader, commentsId } = this.state;
 
     return (
       <div className="wrapper">
@@ -40,10 +47,15 @@ class App extends Component {
                 <HomeWithId
                   {...props}
                   post={posts[props.match.params.id - 1]}
+                  updateData={this.updateData}
                 />
               )}
             />
-            <Route path="/posts/:id/comments" component={Comment} />
+            <Route
+              exact
+              path="/comments"
+              render={() => <Comment currentId={commentsId} />}
+            />
           </Switch>
         )}
       </div>
