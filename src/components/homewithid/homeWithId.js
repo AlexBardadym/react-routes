@@ -8,10 +8,6 @@ class HomeWithId extends Component {
     post: object.isRequired
   };
 
-  async componentDidMount() {
-    this.props.updateData(this.props.post.id);
-  }
-
   render() {
     const { post } = this.props;
     const { id, body } = post;

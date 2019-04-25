@@ -11,9 +11,7 @@ class Comment extends Component {
   async componentDidMount() {
     try {
       const result = await fetch(
-        `https://jsonplaceholder.typicode.com/comments?postId=${
-          this.props.currentId
-        }`
+        `https://jsonplaceholder.typicode.com/comments?postId=${this.state.id}`
       );
 
       const commentsFromApi = await result.json();

@@ -1,66 +1,61 @@
 import React, { Component } from "react";
 import "./App.css";
-import Loader from "./components/loader";
+import Loader from "./components/loader/loader";
 import { Switch, Route, withRouter } from "react-router-dom";
-import Home from "./components/home";
-import HomeWithId from "./components/homeWithId";
-import Comment from "./components/comment";
+import Home from "./components/home/home";
+import HomeWithId from "./components/homewithid/homeWithId";
+import Comment from "./components/comment/comment";
+import { connect } from "react-redux";
+import * as appActions from "./modules/app/app.actions";
 
 class App extends Component {
   state = {
     posts: [],
-    loader: true,
-    commentsId: 0
+    loader: true
   };
 
-  async componentDidMount() {
-    try {
-      const result = await fetch("https://jsonplaceholder.typicode.com/posts");
-
-      const postsFromApi = await result.json();
-
-      this.setState({
-        posts: [...postsFromApi],
-        loader: false
-      });
-    } catch (error) {
-      console.log("Server not respond");
-    }
+  componentDidMount() {
+    this.props.fetchAllData();
   }
+  renderLoader = () => {
+    const { loader } = this.props;
 
-  updateData = currentId => this.setState({ commentsId: currentId });
+    if (loader) {
+      return <Loader />;
+    }
+  };
 
   render() {
-    const { posts, loader, commentsId } = this.state;
+    const { posts } = this.state;
 
     return (
       <div className="wrapper">
-        {loader ? (
-          <Loader />
-        ) : (
-          <Switch>
-            <Route exact path="/" render={() => <Home posts={posts} />} />
-            <Route
-              exact
-              path="/posts/:id"
-              render={props => (
-                <HomeWithId
-                  {...props}
-                  post={posts[props.match.params.id - 1]}
-                  updateData={this.updateData}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/comments"
-              render={() => <Comment currentId={commentsId} />}
-            />
-          </Switch>
-        )}
+        {this.renderLoader()}
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route
+            exact
+            path="/posts/:id"
+            render={props => (
+              <HomeWithId {...props} post={posts[props.match.params.id - 1]} />
+            )}
+          />
+          <Route exact path="/comments" component={Comment} />} />
+        </Switch>
       </div>
     );
   }
 }
 
-export default withRouter(App);
+function mapStateToProps({ app }) {
+  return {
+    loader: app.loader
+  };
+}
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { ...appActions }
+  )(App)
+);

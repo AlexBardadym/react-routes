@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import "./home.css";
-// import "materialize-css/dist/css/materialize.min.css";
 import { array } from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import * as appActions from "../../modules/app/app.actions";
 
 class Home extends Component {
   static propTypes = {
@@ -28,4 +29,13 @@ class Home extends Component {
   }
 }
 
-export default Home;
+function mapStateToProps({ app }) {
+  return {
+    posts: app.posts
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { ...appActions }
+)(Home);
