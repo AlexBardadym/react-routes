@@ -9,11 +9,6 @@ import { connect } from "react-redux";
 import * as appActions from "./modules/app/app.actions";
 
 class App extends Component {
-  state = {
-    posts: [],
-    loader: true
-  };
-
   componentDidMount() {
     this.props.fetchAllData();
   }
@@ -26,20 +21,12 @@ class App extends Component {
   };
 
   render() {
-    const { posts } = this.state;
-
     return (
       <div className="wrapper">
         {this.renderLoader()}
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route
-            exact
-            path="/posts/:id"
-            render={props => (
-              <HomeWithId {...props} post={posts[props.match.params.id - 1]} />
-            )}
-          />
+          <Route exact path="/posts/:id" component={HomeWithId} />
           <Route exact path="/comments" component={Comment} />} />
         </Switch>
       </div>

@@ -10,6 +10,11 @@ class Home extends Component {
     posts: array.isRequired
   };
 
+  async componentDidMount() {
+    const { currentId } = this.props;
+    this.props.fetchPostById(currentId);
+  }
+
   renderLineTable = obj => {
     const { id, title, userId } = obj;
     return (
@@ -31,7 +36,8 @@ class Home extends Component {
 
 function mapStateToProps({ app }) {
   return {
-    posts: app.posts
+    posts: app.posts,
+    currentId: app.currentId
   };
 }
 

@@ -1,26 +1,45 @@
 import React, { Component } from "react";
 // import "materialize-css/dist/css/materialize.min.css";
-import { object } from "prop-types";
+import { array } from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import * as appActions from "../../modules/app/app.actions";
 
 class HomeWithId extends Component {
   static propTypes = {
-    post: object.isRequired
+    postById: array.isRequired
   };
 
-  render() {
-    const { post } = this.props;
-    const { id, body } = post;
+  renderLine = obj => {
+    const { name, email, postId, id, body } = obj;
     return (
       <div className="items" key={id}>
-        <Link to={`/comments?postId=${id}`}>Body : {body}</Link>
-        <br />
+        <br /> Name : {name}
+        <br /> email : {email}
+        <br /> postId : {postId}
+        <br /> id : {id}
+        <br /> body : {body}
+        <br />{" "}
         <Link to={"/"}>
           <span className="backLink">Back to all posts</span>
         </Link>
       </div>
     );
+  };
+
+  render() {
+    const { postById } = this.props;
+    return <div>{postById.map(postById => this.renderLine(postById))}</div>;
   }
 }
 
-export default HomeWithId;
+function mapStateToProps({ app }) {
+  return {
+    postById: app.postById
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { ...appActions }
+)(HomeWithId);

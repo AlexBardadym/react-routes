@@ -5,8 +5,10 @@ const initialState = {
   loader: true,
   posts: [],
   fetchAllDataStatus: "",
-
-  failureMessage: ""
+  fetchPostByIdStatus: "",
+  currentId: 1,
+  failureMessage: "",
+  postById: []
 };
 
 const reducer = {
@@ -39,6 +41,28 @@ const reducer = {
     ...state,
     fetchAllDataStatus: "failure",
     failureMessage: failure
+  }),
+
+  [appActions.fetchPostByIdStart]: state => ({
+    ...state,
+    fetchPostByIdStatus: "pending"
+  }),
+
+  [appActions.fetchPostByIdSuccess]: (state, data) => ({
+    ...state,
+    fetchPostByIdStatus: "success",
+    postById: data
+  }),
+
+  [appActions.fetchPostByIdFailure]: (state, failure) => ({
+    ...state,
+    fetchPostByIdStatus: "failure",
+    failureMessage: failure
+  }),
+
+  [appActions.getCurrentIdSuccess]: (state, data) => ({
+    ...state,
+    currentId: data
   })
 };
 
